@@ -2,7 +2,7 @@
 <html
   lang="en"
   data-ws-project="b51a8909-ae29-431a-bd44-1a6e3c273173"
-  data-ws-last-published="2025-05-04T10:00:19.615Z"
+  data-ws-last-published="2025-05-04T13:04:11.323Z"
 >
   <head>
     <link
@@ -103,6 +103,7 @@
         </div>
         <div class="w-box cn6qthi cyah3ou cmfw54z cpfea1d c1j34mkn">
           <a
+            id="snapchat-link"
             class="w-link carjqp0 c1hhqkfx c1ug851f c1eoaov8 cinhzvn c11jcwdk c1c3pl87 ca2i7zn c1eh6794 czmyur c1qqq93e cpfea1d cbb649g c1l9zozb c1559qbf c193ox4 c1gnp4fx c1iwnuf5 co27vbx cp86yl0 c1p0htba c1ccx8za c1v31wlf"
             href="#"
             ><img
@@ -151,44 +152,15 @@
       }
     </script>
     <script
-      src="/assets/entries/entry-server-routing.Bg0likti.js"
+      src="/assets/entries/entry-server-routing.Y7wUqY4c.js"
       type="module"
       async
     ></script>
     <link
       rel="modulepreload"
-      href="/assets/entries/pages_index.DfjoK9L1.js"
+      href="/assets/entries/pages_index.D3VP_ziy.js"
       as="script"
       type="text/javascript"
     />
   </body>
-  <script>
-  document.addEventListener("DOMContentLoaded", () => {
-    function showPage() {
-      document.body.classList.add("loaded");
-    }
-
-    function fetchGeo() {
-      return fetch("https://ipapi.co/json?token=91d153690ff863")
-        .then(res => {
-          if (!res.ok) throw new Error("ipapi failed");
-          return res.json();
-        })
-        .then(data => {
-          const city = data.city || "";
-          document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
-        })
-        .catch(() => {
-          return fetch("https://api.ipgeolocation.io/ipgeo?apiKey=5076f56f239a41b5bdb0d1a4ab911ebb")
-            .then(res => res.json())
-            .then(data => {
-              const city = data.city || "";
-              document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
-            });
-        });
-    }
-
-    fetchGeo().finally(showPage);
-  });
-</script>
 </html>
