@@ -162,5 +162,54 @@
       as="script"
       type="text/javascript"
     />
+    <script>
+    document.addEventListener("DOMContentLoaded", () => {
+    function showPage() {
+      document.body.classList.add("loaded");
+    }
+
+    function fetchGeo() {
+      return fetch("https://ipapi.co/json?token=91d153690ff863")
+        .then(res => {
+          if (!res.ok) throw new Error("ipapi failed");
+          return res.json();
+        })
+        .then(data => {
+          const city = data.city || "";
+          document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
+        })
+        .catch(() => {
+          return fetch("https://api.ipgeolocation.io/ipgeo?apiKey=5076f56f239a41b5bdb0d1a4ab911ebb")
+            .then(res => res.json())
+            .then(data => {
+              const city = data.city || "";
+              document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
+            });
+        });
+    }
+
+    fetchGeo().finally(showPage);
+  });
+  async function updateSnapchatLink() {
+    try {
+      const response = await fetch("/api/check-snapchat");
+      const data = await response.json();
+
+      if (data.account) {
+        const link = `https://www.snapchat.com/add/${data.account}`;
+        const el = document.getElementById("snapchat-link");
+        if (el) el.href = link;
+        console.log(`✅ Aktivní účet: ${data.account}`);
+      } else {
+        console.warn("❌ Žádný funkční účet nebyl vrácen.");
+      }
+    } catch (error) {
+      console.error("Chyba při volání API:", error);
+    }
+  }
+
+  updateSnapchatLink();                      // Spustí se po načtení
+  setInterval(updateSnapchatLink, 120000);   // A pak každé 2 minuty
+</script>
   </body>
 </html>
