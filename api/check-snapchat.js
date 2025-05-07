@@ -1,9 +1,10 @@
+
 export default async function handler(req, res) {
   const accounts = [
-    'jjrsweert',       // nefunkční
-    'rossiekk',        // nefunkční
-    'singh-raja',      // funkční
-    'jakebsweet'       // funkční
+    'jjrsweert',
+    'rossiekk',
+    'singh-raja',
+    'jakebsweet'
   ];
 
   const activeAccounts = [];
@@ -12,7 +13,6 @@ export default async function handler(req, res) {
     try {
       const response = await fetch(`https://www.snapchat.com/add/${account}`);
       const html = await response.text();
-
       if (html.includes('snapcode') || html.includes('Add me on Snapchat')) {
         activeAccounts.push(account);
       }
