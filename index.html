@@ -5,6 +5,11 @@
   data-ws-last-published="2025-05-04T13:04:11.323Z"
 >
   <head>
+        <style>
+  body {
+    visibility: hidden;
+  }
+</style>
     <link
       rel="stylesheet"
       type="text/css"
@@ -162,54 +167,71 @@
       as="script"
       type="text/javascript"
     />
-    <script>
-    document.addEventListener("DOMContentLoaded", () => {
-    function showPage() {
-      document.body.classList.add("loaded");
-    }
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("loaded");
 
-    function fetchGeo() {
-      return fetch("https://ipapi.co/json?token=91d153690ff863")
-        .then(res => {
-          if (!res.ok) throw new Error("ipapi failed");
-          return res.json();
-        })
-        .then(data => {
-          const city = data.city || "";
-          document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
-        })
-        .catch(() => {
-          return fetch("https://api.ipgeolocation.io/ipgeo?apiKey=5076f56f239a41b5bdb0d1a4ab911ebb")
-            .then(res => res.json())
-            .then(data => {
-              const city = data.city || "";
-              document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
-            });
-        });
+  // 🌍 Geo lokalizace města
+  async function fetchGeo() {
+    try {
+      const res = await fetch("https://ipwho.is/");
+      if (!res.ok) throw new Error("ipwho.is selhalo");
+      const data = await res.json();
+      const city = data.city || "";
+      document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
+      console.log("🌍 Geo město (ipwho.is):", city);
+    } catch (e) {
+      console.warn("⚠️ ipwho.is selhalo, zkouším ipgeolocation.io…", e);
+      try {
+        const res = await fetch("https://api.ipgeolocation.io/ipgeo?apiKey=5076f56f239a41b5bdb0d1a4ab911ebb");
+        if (!res.ok) throw new Error("ipgeolocation.io selhalo");
+        const data = await res.json();
+        const city = data.city || "";
+        document.querySelectorAll("#city").forEach(el => el.textContent = city + ",");
+        console.log("🌍 Geo město (ipgeolocation.io):", city);
+      } catch (err) {
+        console.error("❌ Obě geolokační služby selhaly:", err);
+      }
+    } finally {
+      document.body.style.visibility = "visible";
     }
-
-    fetchGeo().finally(showPage);
-  });
-async function updateSnapchatLink() {
-  try {
-    const response = await fetch("/api/rotate-snapchat", { method: "POST" });
-    const data = await response.json();
-
-    if (data.account) {
-      const link = `https://www.snapchat.com/add/${data.account}`;
-      const el = document.getElementById("snapchat-link");
-      if (el) el.setAttribute("href", link);
-      console.log(`✅ Aktivní účet: ${data.account}`);
-    } else {
-      console.warn("❌ Žádný funkční účet nebyl vrácen.");
-    }
-  } catch (error) {
-    console.error("Chyba při volání API:", error);
   }
-}
 
-  updateSnapchatLink();                      // Spustí se po načtení
-  setInterval(updateSnapchatLink, 120000);   // A pak každé 2 minuty
+  // 🔁 Načti Snapchat účet z API a nastav <a href>
+  async function updateSnapchatLink() {
+    try {
+      const res = await fetch("/api/rotate-snapchat", { method: "POST" });
+      const data = await res.json();
+      if (data.account) {
+        const el = document.getElementById("snapchat-link");
+        if (el) {
+          el.setAttribute("href", `https://www.snapchat.com/add/${data.account}`);
+          console.log(`🔗 Nastaven účet: ${data.account}`);
+        }
+      }
+    } catch (e) {
+      console.error("Chyba rotate-snapchat:", e);
+    }
+  }
+
+  // 🖱️ Při kliknutí otevři Snapchat
+  const el = document.getElementById("snapchat-link");
+  if (el) {
+    el.addEventListener("click", async (e) => {
+      e.preventDefault();
+      await updateSnapchatLink();
+      const href = el.getAttribute("href");
+      if (href && href !== "#") {
+        window.open(href, "_blank");
+      }
+    });
+  }
+
+  // ▶️ Spustit vše po načtení
+  fetchGeo();
+  updateSnapchatLink();
+    setInterval(updateSnapchatLink, 120000); // každé 2 minuty
+});
 </script>
   </body>
 </html>
