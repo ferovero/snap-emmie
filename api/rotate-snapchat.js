@@ -21,21 +21,22 @@ if (req.method === "GET") {
     "jakebsweet",
   ];
 
-  const activeAccounts = [];
-
-  for (const username of accounts) {
+const activeAccounts = await Promise.all(
+  accounts.map(async (username) => {
     try {
-      const response = await fetch(`https://www.snapchat.com/add/${username}`);
-      const html = await response.text();
+      const res = await fetch(`https://www.snapchat.com/add/${username}`);
+      const html = await res.text();
       if (html.includes("snapcode") || html.includes("Add me on Snapchat")) {
-        activeAccounts.push(username);
+        return username;
       }
-    } catch {
-      continue;
-    }
-  }
+    } catch {}
+    return null;
+  })
+);
 
-  const currentAccount = activeAccounts[index] || null;
+const filteredAccounts = activeAccounts.filter(Boolean);
+
+  const currentAccount = filteredAccounts[index] || null;
 
   return res.status(200).json({
     debug: true,
