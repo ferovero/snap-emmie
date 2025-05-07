@@ -6,60 +6,15 @@ const redis = new Redis({
   token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
 
-export default async function handler(req, res) {
-  console.log("✅ API spuštěno");
+const accounts = [
+  "jjrsweert",
+  "rossiekk",
+  "singh-raja",
+  "jakebsweet",
+];
 
-  // 📌 DEBUG INFO pro GET požadavek (z prohlížeče)
-if (req.method === "GET") {
-  const clicks = Number(await redis.get("clickCount")) || 0;
-  const index = Number(await redis.get("currentIndex")) || 0;
-
-  const accounts = [
-    "jjrsweert",
-    "rossiekk",
-    "singh-raja",
-    "jakebsweet",
-  ];
-
-const activeAccounts = await Promise.all(
-  accounts.map(async (username) => {
-    try {
-      const res = await fetch(`https://www.snapchat.com/add/${username}`);
-      const html = await res.text();
-      if (html.includes("snapcode") || html.includes("Add me on Snapchat")) {
-        return username;
-      }
-    } catch {}
-    return null;
-  })
-);
-
-const filteredAccounts = activeAccounts.filter(Boolean);
-
-  const currentAccount = filteredAccounts[index] || null;
-
-  return res.status(200).json({
-    debug: true,
-    clicks,
-    index,
-    account: currentAccount,
-    totalActive: activeAccounts.length,
-    activeAccounts
-  });
-}
-
-  if (req.method !== "POST") {
-    console.warn("❌ Špatná metoda:", req.method);
-    return res.status(405).json({ error: "Method not allowed" });
-  }
-
-  const accounts = [
-    "jjrsweert",
-    "rossiekk",
-    "singh-raja",
-    "jakebsweet",
-  ];
-
+// Funkce pro získání aktivních účtů
+async function getActiveAccounts() {
   const activeAccounts = [];
 
   for (const username of accounts) {
@@ -70,14 +25,42 @@ const filteredAccounts = activeAccounts.filter(Boolean);
         activeAccounts.push(username);
       }
     } catch (err) {
-      console.error(`⚠️ Chyba při kontrole účtu ${username}:`, err.message);
-      continue;
+      console.error(`Chyba při kontrole účtu ${username}:`, err.message);
     }
   }
 
-  console.log("🔁 Aktivní účty:", activeAccounts);
+  return activeAccounts;
+}
 
-  if (activeAccounts.length === 0) {
+export default async function handler(req, res) {
+  console.log("✅ API spuštěno");
+
+  if (req.method === "GET") {
+    const clicks = Number(await redis.get("clickCount")) || 0;
+    const index = Number(await redis.get("currentIndex")) || 0;
+    const activeAccountsJSON = await redis.get("activeAccounts");
+    const activeAccounts = activeAccountsJSON ? JSON.parse(activeAccountsJSON) : [];
+
+    const currentAccount = activeAccounts[index] || null;
+
+    return res.status(200).json({
+      debug: true,
+      clicks,
+      index,
+      account: currentAccount,
+      totalActive: activeAccounts.length,
+      activeAccounts,
+    });
+  }
+
+  if (req.method !== "POST") {
+    console.warn("❌ Špatná metoda:", req.method);
+    return res.status(405).json({ error: "Method not allowed" });
+  }
+
+  const newActiveAccounts = await getActiveAccounts();
+
+  if (newActiveAccounts.length === 0) {
     console.error("❌ Žádné aktivní účty!");
     return res.status(500).json({ error: "No active accounts found" });
   }
@@ -86,26 +69,37 @@ const filteredAccounts = activeAccounts.filter(Boolean);
   const indexKey = "currentIndex";
 
   try {
+    const oldActiveAccountsJSON = await redis.get("activeAccounts");
+    const oldActiveAccounts = oldActiveAccountsJSON ? JSON.parse(oldActiveAccountsJSON) : [];
+
     let clicks = Number(await redis.get(clicksKey)) || 0;
     let index = Number(await redis.get(indexKey)) || 0;
+
+    // Pokud se seznam aktivních účtů změnil, aktualizuj ho a resetuj index
+    if (JSON.stringify(newActiveAccounts) !== JSON.stringify(oldActiveAccounts)) {
+      await redis.set("activeAccounts", JSON.stringify(newActiveAccounts));
+      index = 0;
+      clicks = 0;
+      await redis.set(indexKey, index);
+    }
 
     clicks++;
 
     if (clicks >= 50) {
-      index = (index + 1) % activeAccounts.length;
+      index = (index + 1) % newActiveAccounts.length;
       clicks = 0;
       await redis.set(indexKey, index);
     }
 
     await redis.set(clicksKey, clicks);
 
-    console.log("✅ Vrací účet:", activeAccounts[index]);
+    console.log("✅ Vrací účet:", newActiveAccounts[index]);
 
     return res.status(200).json({
-      account: activeAccounts[index],
+      account: newActiveAccounts[index],
       clicks,
       index,
-      totalActive: activeAccounts.length,
+      totalActive: newActiveAccounts.length,
     });
   } catch (err) {
     console.error("❌ Chyba při práci s Redis:", err.message);
