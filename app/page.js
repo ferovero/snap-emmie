@@ -87,7 +87,8 @@ export default async function Home() {
                         </div>
                         <div className="w-box cpfea1d c10i6s3m csc1n6w c10lgpb0 c73prjs">
                             <div className="w-text czowava">Personal trainer in</div>
-                            <span data-ws-tag="span" id="city" className="w-text czowava">{geo.city}</span>
+                            <span data-ws-tag="span" id="city" className="w-text czowava">{geo.city}</span> {" "}
+                            <span data-ws-tag="span" id="flag" className="w-text czowava">{geo.flag}</span>, {" "}
                             <div className="w-text czowava">Dubai 🇦🇪 and Ealing 🇬🇧</div>
                             <div className="w-text czowava">
                                 I&#x27;m obsessed with hugs, travel and fittness 💪🏝️❤️.
