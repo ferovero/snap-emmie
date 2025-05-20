@@ -49,7 +49,7 @@ export async function fetchGeo(ip) {
     } catch {
         try {
             const res = await fetch(
-                "https://api.ipgeolocation.io/ipgeo?apiKey=5076f56f239a41b5bdb0d1a4ab911ebb",
+                `https://api.ipgeolocation.io/ipgeo?apiKey=5076f56f239a41b5bdb0d1a4ab911ebb&ip=${ip}`,
                 {
                     cache: "no-store"
                 }
