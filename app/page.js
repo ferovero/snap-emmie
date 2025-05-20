@@ -47,7 +47,7 @@ export default async function Home() {
                         <div
                             className="w-box c2qv4r3 c1rgto2x c1hhqkfx c1ug851f c1eoaov8 cinhzvn c1i0f0jo c1vbxcsq c13aupyd"
                         >
-                            {/* <img
+                            <img
                                 alt=""
                                 width="600"
                                 height="600"
@@ -71,7 +71,7 @@ export default async function Home() {
               "
                                 decoding="async"
                                 loading="lazy"
-                            /> */}
+                            />
                         </div>
                         <div className="w-box cpfea1d c1559qbf cbb649g c1l9zozb cltrnrx cidhgp8">
                             <div className="w-box c1u38zco c1iapu3e">
