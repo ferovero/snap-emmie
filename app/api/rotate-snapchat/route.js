@@ -2,15 +2,11 @@ import { fetch } from "undici";
 import { Redis } from "@upstash/redis";
 import { NextResponse } from "next/server";
 
-// const redis = new Redis({
-//     url: process.env.UPSTASH_REDIS_REST_URL,
-//     token: process.env.UPSTASH_REDIS_REST_TOKEN,
-// });
-
 const redis = new Redis({
-    url: 'https://hardy-drake-15161.upstash.io',
-    token: 'ATs5AAIjcDFjMjgyNWI1NmNhYmQ0ZGVmYTAxNWZiNDFlOTMxM2I5YnAxMA',
+    url: process.env.UPSTASH_REDIS_REST_URL,
+    token: process.env.UPSTASH_REDIS_REST_TOKEN,
 });
+
 const accounts = ["jjrsweert", "rossiekk", "singh-raja", "jakebsweet"];
 
 async function getActiveAccounts() {

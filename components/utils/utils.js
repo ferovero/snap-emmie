@@ -1,3 +1,4 @@
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 export async function fetchProfile() {
     return {
         "profile": {
@@ -112,7 +113,7 @@ export function startCountdown(minutes = 19, seconds = 36, setTimer) {
 export async function updateSnapchatLink() {
     let result = "";
     try {
-        const res = await fetch("http://localhost:3000/api/rotate-snapchat", { method: "POST", cache: "no-store" });
+        const res = await fetch(`${baseUrl}/api/rotate-snapchat`, { method: "POST", cache: "no-store" });
         console.log(res);
         const data = await res.json();
         console.log("🔗 Snapchat link:", data);
