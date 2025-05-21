@@ -72,44 +72,6 @@ export async function fetchGeo(ip) {
     return result;
 }
 
-export function getFutureDate(days = 3) {
-    const now = new Date();
-    const future = new Date(now.getFullYear(), now.getMonth(), now.getDate() + days);
-    const day = future.getDate();
-    const suffix = (d => {
-        if (d >= 11 && d <= 13) return "th";
-        switch (d % 10) {
-            case 1: return "st";
-            case 2: return "nd";
-            case 3: return "rd";
-            default: return "th";
-        }
-    })(day);
-    const month = future.toLocaleString("en-US", { month: "long" });
-    return `${day}${suffix} ${month}.`;
-}
-
-export function startCountdown(minutes = 19, seconds = 36, setTimer) {
-    let remaining = minutes * 60 + seconds;
-    function tick() {
-        if (remaining < 0) {
-            clearInterval(interval);
-            // tickEls.forEach(el => el.textContent = "00:00");
-            setTimer("00:00");
-            return;
-        }
-        const m = String(Math.floor(remaining / 60)).padStart(2, "0");
-        const s = String(remaining % 60).padStart(2, "0");
-        // tickEls.forEach(el => el.textContent = `${m}:${s}`);
-        setTimer(`${m}:${s}`);
-        remaining--;
-    }
-    const interval = setInterval(tick, 1000);
-    tick();
-    return () => clearInterval(interval);
-}
-
-
 export async function updateSnapchatLink() {
     let result = "";
     try {

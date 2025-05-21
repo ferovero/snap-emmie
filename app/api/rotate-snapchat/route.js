@@ -26,7 +26,17 @@ async function getActiveAccounts() {
     );
     return results.filter(Boolean);
 }
-
+const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
+export async function OPTIONS() {
+    return new NextResponse(null, {
+        status: 204,
+        headers: {
+            'Access-Control-Allow-Origin': baseUrl,
+            'Access-Control-Allow-Methods': 'GET,POST,OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+        },
+    });
+}
 // ✅ GET handler
 export async function GET() {
     const clicks = Number(await redis.get("clickCount")) || 0;
