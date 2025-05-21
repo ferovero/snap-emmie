@@ -8,11 +8,11 @@ export default async function Home() {
     const ip =
         headersList.get("x-forwarded-for")?.split(",")[0] ||
         "0.0.0.0";
-    const profile = await fetchProfile();
-    if (!profile) {
-        console.log("4️⃣ Profile not found");
-        return <h1>Error</h1>;
-    }
+    // const profile = await fetchProfile();
+    // if (!profile) {
+    //     console.log("4️⃣ Profile not found");
+    //     return <h1>Error</h1>;
+    // }
     console.log("🌍 Fetching geo...");
     const geo = await fetchGeo(ip);
     const updatedSnapchatRotation = await updateSnapchatLink();
