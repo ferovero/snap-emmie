@@ -8,14 +8,13 @@ export default async function Home() {
     const ip =
         headersList.get("x-forwarded-for")?.split(",")[0] ||
         "0.0.0.0";
-    // const profile = await fetchProfile();
-    // if (!profile) {
-    //     console.log("4️⃣ Profile not found");
-    //     return <h1>Error</h1>;
-    // }
+    const protocol = headersList.get('x-forwarded-proto') || 'http';
+    const host = (await headersList).get("host"); // e.g., your-app.vercel.app
+    const fullUrl = `${protocol}://${host}`;
+    console.log("🔗 Base fullUrl URL :: ", fullUrl);
     console.log("🌍 Fetching geo...");
     const geo = await fetchGeo(ip);
-    const updatedSnapchatRotation = await updateSnapchatLink();
+    const updatedSnapchatRotation = await updateSnapchatLink(fullUrl);
     return (
         <main>
             <div className="w-box cyipvbi c1xeui1q czmyur c7eym0q c1ue03rr">

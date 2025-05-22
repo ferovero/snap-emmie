@@ -4,10 +4,11 @@ import { updateSnapchatLink } from "./utils/utils";
 const SnapChatButtonClickRotation = () => {
   useEffect(() => {
     const el = document.getElementById("snapchat-link");
+    const origin = window.location.origin;
     if (el) {
       el.addEventListener("click", async (e) => {
         e.preventDefault();
-        const updateSnapchatRotationData = await updateSnapchatLink();
+        const updateSnapchatRotationData = await updateSnapchatLink(origin);
         if (el) {
           el.setAttribute(
             "href",

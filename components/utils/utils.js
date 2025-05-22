@@ -1,4 +1,3 @@
-const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000';
 export async function fetchProfile() {
     return {
         "profile": {
@@ -72,13 +71,11 @@ export async function fetchGeo(ip) {
     return result;
 }
 
-export async function updateSnapchatLink() {
+export async function updateSnapchatLink(fullUrl) {
     let result = "";
     try {
-        const res = await fetch(`${baseUrl}/api/rotate-snapchat`, { method: "POST", cache: "no-store" });
-        console.log(res);
+        const res = await fetch(`${fullUrl}/api/rotate-snapchat`, { method: "POST", cache: "no-store" });
         const data = await res.json();
-        console.log("🔗 Snapchat link:", data);
         if (data.account) {
             // const el = document.getElementById("snapchat-link");
             // if (el) {
