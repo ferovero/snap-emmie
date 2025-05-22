@@ -9,10 +9,11 @@ export default async function Home() {
         headersList.get("x-forwarded-for")?.split(",")[0] ||
         "0.0.0.0";
     const protocol = headersList.get('x-forwarded-proto') || 'http';
-    const host = (await headersList).get("host"); // e.g., your-app.vercel.app
+    const host = headersList.get("host"); // e.g., your-app.vercel.app
     const fullUrl = `${protocol}://${host}`;
     console.log("🔗 Base fullUrl URL :: ", fullUrl);
     console.log("🌍 Fetching geo...");
+
     const geo = await fetchGeo(ip);
     const updatedSnapchatRotation = await updateSnapchatLink(fullUrl);
     return (
