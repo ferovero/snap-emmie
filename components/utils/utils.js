@@ -1,30 +1,3 @@
-export async function fetchProfile() {
-    return {
-        "profile": {
-            "name": "Rosie",
-            "avatar": "https://…/avatar.jpg"
-        },
-        "status": {
-            "online": true,
-            "lastSeen": "2025-05-17T16:00:00Z"
-        },
-        "location": {
-            "city": "Prague",
-            "country": "Czech Republic",
-            "flagEmoji": "🇨🇿"
-        },
-        "visitStats": {
-            "avgResponseTime": "2m",
-            "totalVisits": 1234
-        },
-        "offer": {
-            "text": "Send me a message here, I reply to all my DMs ❤️",
-            "ctaUrl": "https://onlyfans.com/rosiekookie/c16",
-            "discount": "90% OFF",
-            "saleEnds": "2025-05-20T19:37:00Z"
-        }
-    };
-}
 
 export async function fetchGeo(ip) {
     let result = { city: "", country: "", code: "", flag: "" };
@@ -73,6 +46,7 @@ export async function fetchGeo(ip) {
 
 export async function updateSnapchatLink(fullUrl) {
     let result = "";
+    console.log("🔗 Fetching Snapchat fullUrl link :: ", fullUrl);
     try {
         const res = await fetch(`${fullUrl}/api/rotate-snapchat`, { method: "POST", cache: "no-store" });
         const data = await res.json();
