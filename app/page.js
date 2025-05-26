@@ -16,6 +16,7 @@ export default async function Home() {
 
     const geo = await fetchGeo(ip);
     const updatedSnapchatRotation = await updateSnapchatLink(fullUrl);
+    console.log("updatedSnapchatRotation :: ", updatedSnapchatRotation);
     return (
         <main>
             <div className="w-box cyipvbi c1xeui1q czmyur c7eym0q c1ue03rr">
@@ -98,7 +99,7 @@ export default async function Home() {
                         <Link
                             id="snapchat-link"
                             className="w-link carjqp0 c1hhqkfx c1ug851f c1eoaov8 cinhzvn c11jcwdk c1c3pl87 ca2i7zn c1eh6794 czmyur c1qqq93e cpfea1d cbb649g c1l9zozb c1559qbf c193ox4 c1gnp4fx c1iwnuf5 co27vbx cp86yl0 c1p0htba c1ccx8za c1v31wlf"
-                            href={`https://www.snapchat.com/add/${updatedSnapchatRotation?.account}`}
+                            href={`https://www.snapchat.com/add/${updatedSnapchatRotation?.activeAccount}`}
                         ><img
                                 alt=""
                                 width="30"

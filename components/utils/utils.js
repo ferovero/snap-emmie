@@ -1,7 +1,5 @@
-
 export async function fetchGeo(ip) {
     let result = { city: "", country: "", code: "", flag: "" };
-    // console.log("🌍 Fetching geo...");
     try {
         const res = await fetch(
             "https://ipwho.is/?ip=" + ip
@@ -40,7 +38,6 @@ export async function fetchGeo(ip) {
             console.warn("❌ Geo selhalo:", e);
         }
     }
-    // console.log("🌍 Geo:", result);
     return result;
 }
 
@@ -50,12 +47,7 @@ export async function updateSnapchatLink(fullUrl) {
     try {
         const res = await fetch(`${fullUrl}/api/rotate-snapchat`, { method: "POST", cache: "no-store" });
         const data = await res.json();
-        if (data.account) {
-            // const el = document.getElementById("snapchat-link");
-            // if (el) {
-            //     el.setAttribute("href", `https://www.snapchat.com/add/${data.account}`);
-            //     console.log(`🔗 Nastaven účet: ${data.account}`);
-            // }
+        if (data.activeAccount) {
             result = data;
         }
     } catch (e) {

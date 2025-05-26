@@ -14,13 +14,13 @@ const SnapChatButtonClickRotation = () => {
         }
         // Async fetch and update the link in background (won’t affect this click)
         updateSnapchatLink(origin).then((updateSnapchatRotationData) => {
-          if (updateSnapchatRotationData?.account) {
+          if (updateSnapchatRotationData?.activeAccount) {
             el.setAttribute(
               "href",
-              `https://www.snapchat.com/add/${updateSnapchatRotationData.account}`
+              `https://www.snapchat.com/add/${updateSnapchatRotationData.activeAccount}`
             );
             console.log(
-              `🔗 Updated link for future: ${updateSnapchatRotationData.account}`
+              `🔗 Updated link for future: ${updateSnapchatRotationData.activeAccount}`
             );
           }
         });
@@ -29,6 +29,10 @@ const SnapChatButtonClickRotation = () => {
         // Optional: if you prefer to suppress default behavior (e.g. avoid following the old link in same tab), then use window.open and preventDefault.
         e.preventDefault(); // Keep if you want to force opening in _blank
       });
+
+      //   for (let i = 0; i < 50; i++) {
+      //     updateSnapchatLink(origin);
+      //   }
     }
   }, []);
   return <></>;
